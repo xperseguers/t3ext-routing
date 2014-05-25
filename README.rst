@@ -95,13 +95,6 @@ Classes/Controller/DummyController.php
 
     class DummyController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
-        public function initializeAction() {
-            // Sample
-            if ($this->request->getFormat() === 'json') {
-                header('Content-Type: application/json');
-            }
-        }
-
         /**
          * @param int $value
          * @return string
