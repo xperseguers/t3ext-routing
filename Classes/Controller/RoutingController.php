@@ -211,8 +211,8 @@ class RoutingController {
 		);
 
 		\TYPO3\CMS\Frontend\Utility\EidUtility::initLanguage();
+		\TYPO3\CMS\Frontend\Utility\EidUtility::initTCA();
 
-		$tsfe->connectToDB();
 		$tsfe->initFEuser();
 		$tsfe->checkAlternativeIdMethods();
 		$tsfe->determineId();
@@ -226,7 +226,7 @@ class RoutingController {
 		$GLOBALS['TSFE'] = $tsfe;
 
 		// Get linkVars, absRefPrefix, etc
-		\TYPO3\CMS\Frontend\Page\PageGenerator::pagegenInit();
+		//\TYPO3\CMS\Frontend\Page\PageGenerator::pagegenInit();
 	}
 
 }
