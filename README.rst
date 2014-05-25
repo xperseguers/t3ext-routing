@@ -103,6 +103,7 @@ Classes/Controller/DummyController.php
             $response = array('value' => $value);
 
             if ($this->request->getFormat() === 'json') {
+                // Hint: you should use \TYPO3\CMS\Extbase\Mvc\View\JsonView instead
                 header('Content-Type: application/json');
                 $response = json_encode($response);
             } else {
