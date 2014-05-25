@@ -115,3 +115,43 @@ Classes/Controller/DummyController.php
 
     }
 
+
+Using JsonView
+==============
+
+Let's assume you have the list of persons to be exported with the action ``demo`` above.
+
+Create a file ``Classes/View/Dummy/DemoJson.php``::
+
+    <?php
+    namespace MyVendor\ExtensionKey\View\Dummy;
+
+    class DemoJson extends \TYPO3\CMS\Extbase\Mvc\View\JsonView {
+
+        protected $configuration = array(
+            'persons' => array(
+                '_descendAll' => array(
+                    //'_only' => array('property1', 'property2'),
+                    '_exclude' => array('pid')
+                )
+            )
+        );
+
+    }
+
+and modify your action ``demo``::
+
+    /**
+     * @param int $value
+     * @return void
+     */
+    public function demo($value) {
+        $persons = $this->personRepository->findAll();
+        $this->view->assign('persons', $persons);
+        $this->view->setVariablesToRender(array('persons'));
+    }
+
+and you're done! Extbase's dispatcher will see your special view "Demo" to be used for format "Json" and instantiate it
+instead of the default view. Your domain objects will be serialized and the JSON header sent automatically.
+
+**Good to know:** The class name pattern is ``@vendor\@extension\View\@controller\@action@format``.
