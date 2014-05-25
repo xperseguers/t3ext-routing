@@ -36,9 +36,9 @@ Demo Routing
 
 This shows how to update your extension to route request automatically and handle requests like::
 
-    http://your-website.tld/extension-key/my-demo/1234
-    http://your-website.tld/extension-key/my-demo/1234.json
-    http://your-website.tld/extension-key/my-demo/99
+    http://your-website.tld/routing/extension-key/my-demo/1234
+    http://your-website.tld/routing/extension-key/my-demo/1234.json
+    http://your-website.tld/routing/extension-key/my-demo/99
 
 where ``1234`` and ``99`` will be mapped to some method parameter (and converted to domain object if needed) and
 ``json`` will sets the response format to ``json``.
