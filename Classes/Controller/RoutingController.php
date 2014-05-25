@@ -201,19 +201,28 @@ class RoutingController {
 	 * @return void
 	 */
 	protected function initTSFE() {
+		$pageId = GeneralUtility::_GP('id');
 		/** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $tsfe */
 		$tsfe = GeneralUtility::makeInstance(
 			'TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController',
 			$GLOBALS['TYPO3_CONF_VARS'],
-			GeneralUtility::_GP('id'),
+			$pageId,
 			''
 		);
+
+		\TYPO3\CMS\Frontend\Utility\EidUtility::initLanguage();
+
 		$tsfe->connectToDB();
 		$tsfe->initFEuser();
 		$tsfe->checkAlternativeIdMethods();
 		$tsfe->determineId();
 		$tsfe->initTemplate();
 		$tsfe->getConfigArray();
+		if ($pageId > 0) {
+			$tsfe->settingLanguage();
+		}
+		$tsfe->settingLocale();
+
 		$GLOBALS['TSFE'] = $tsfe;
 
 		// Get linkVars, absRefPrefix, etc

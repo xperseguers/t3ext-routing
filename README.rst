@@ -41,7 +41,7 @@ This shows how to update your extension to route request automatically and handl
     http://your-website.tld/routing/extension-key/my-demo/99
 
 where ``1234`` and ``99`` will be mapped to some method parameter (and converted to domain object if needed) and
-``json`` will sets the response format to ``json``.
+``json`` will set the response format to ``json``.
 
 
 ext_localconf.php
