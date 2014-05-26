@@ -46,7 +46,7 @@ The routing is stored as ``Configuration/Routes.yaml`` and looks like that::
 
 The name of the route is sent as additional header in the response:
 
-.. image:: _Documentation/Images/headers.png
+.. image:: Documentation/Images/headers.png
     :alt: Additional HTTP header "X-Causal-Routing-Route"
 
 
