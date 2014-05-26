@@ -88,7 +88,7 @@ class RoutingController {
 					$controllerParameters = NULL;
 					foreach ($this->routes as $route) {
 						if (preg_match($route['uriPattern'], $subroute, $arguments)) {
-							$this->lastRouteName = sprintf('[%s] %s', $extensionKey, $route['name']);
+							$this->lastRouteName = !empty($route['name']) ? sprintf('[%s] %s', $extensionKey, $route['name']) : NULL;
 							$controllerParameters = $route['default'];
 							$pluginParameters = array();
 
@@ -259,5 +259,8 @@ HTML;
 }
 
 // Debugging information
-header('X-Causal-Routing-Route: ' . $routing->getLastRouteName());
+$routeName = $routing->getLastRouteName();
+if (!empty($routeName)) {
+	header('X-Causal-Routing-Route: ' . $routeName);
+}
 echo $ret;
