@@ -17,7 +17,7 @@ This extension lets you route requests like::
     http://your-website.tld/routing/extension-key/my-demo/99
 
 to any controller/action based on a YAML-based routing configuration. In this example,
-where ``1234`` and ``99`` will be mapped to some method parameter (and converted to domain object if needed) and
+where ``1234`` and ``99`` will be mapped to some method argument (and converted to domain object if needed) and
 ``json`` will set the response format to ``json``.
 
 
