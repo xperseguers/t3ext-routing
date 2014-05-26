@@ -7,65 +7,24 @@ Service to route HTTP/REST requests to your own controller/actions.
 **Good to know:** The routing is inspired by the way Flow's router works (`read more <http://docs.typo3.org/flow/TYPO3FlowDocumentation/2.1/TheDefinitiveGuide/PartIII/Routing.html>`_).
 
 
-Install
-=======
+What does it do?
+================
 
-#. Clone this repository into `typo3conf/ext/routing`::
-
-       $ cd /path/to/typo3conf/ext/
-       $ git clone https://github.com/xperseguers/t3ext-routing.git routing
-
-#. Go to Extension Manager and activate extension ``routing``
-
-#. Add a rewrite rule to your ``.htaccess``::
-
-       RewriteRule ^routing/(.*)$ /index.php?eID=routing&route=$1 [QSA,L]
-
-   This will have the effect of using this extension for handling requests starting with ``routing/``.
-
-Usage
-=====
-
-The router is using the first segment of the ``route`` parameter as extension key to determine how to handle the
-remaining of the requested route. A file ``Configuration/Routes.yaml`` in the corresponding extension directory is then
-read to process the request and dispatch it accordingly.
-
-
-Demo Routing
-============
-
-This shows how to update your extension to route request automatically and handle requests like::
+This extension lets you route requests like::
 
     http://your-website.tld/routing/extension-key/my-demo/1234
     http://your-website.tld/routing/extension-key/my-demo/1234.json
     http://your-website.tld/routing/extension-key/my-demo/99
 
+to any controller/action based on a YAML-based routing configuration. In this example,
 where ``1234`` and ``99`` will be mapped to some method parameter (and converted to domain object if needed) and
 ``json`` will set the response format to ``json``.
 
 
-ext_localconf.php
------------------
+Sample Routing
+--------------
 
-::
-
-    <?php
-    if (!defined('TYPO3_MODE')) {
-        die ('Access denied.');
-    }
-
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'MyVendor.' . $_EXTKEY,
-        'API',
-        array('Dummy' => 'demo'),
-        array('Dummy' => 'demo')
-    );
-
-
-Configuration/Routes.yaml
--------------------------
-
-::
+The routing is stored as ``Configuration/Routes.yaml`` and looks like that::
 
     -
       name: 'Demo action with a parameter in a given format (JSON, ...)'
@@ -85,73 +44,27 @@ Configuration/Routes.yaml
         '@action':     'demo'
 
 
-Classes/Controller/DummyController.php
---------------------------------------
+The name of the route is sent as additional header in the response:
 
-::
-
-    <?php
-    namespace MyVendor\ExtensionKey\Controller;
-
-    class DummyController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
-
-        /**
-         * @param int $value
-         * @return string
-         */
-        public function demo($value) {
-            $response = array('value' => $value);
-
-            if ($this->request->getFormat() === 'json') {
-                // Hint: you should use \TYPO3\CMS\Extbase\Mvc\View\JsonView instead
-                header('Content-Type: application/json');
-                $response = json_encode($response);
-            } else {
-                $response = var_export($response, TRUE);
-            }
-
-            return $response;
-        }
-
-    }
+.. image:: _Documentation/Images/headers.png
+    :alt: Additional HTTP header "X-Causal-Routing-Route"
 
 
-Using JsonView
-==============
+Installation
+============
 
-Let's assume you have the list of persons to be exported with the action ``demo`` above.
+#. Clone this repository into `typo3conf/ext/routing`::
 
-Create a file ``Classes/View/Dummy/DemoJson.php``::
+       $ cd /path/to/typo3conf/ext/
+       $ git clone https://github.com/xperseguers/t3ext-routing.git routing
 
-    <?php
-    namespace MyVendor\ExtensionKey\View\Dummy;
+#. Go to Extension Manager and activate extension ``routing``
 
-    class DemoJson extends \TYPO3\CMS\Extbase\Mvc\View\JsonView {
+#. Add a rewrite rule to your ``.htaccess``::
 
-        protected $configuration = array(
-            'persons' => array(
-                '_descendAll' => array(
-                    //'_only' => array('property1', 'property2'),
-                    '_exclude' => array('pid')
-                )
-            )
-        );
+       RewriteRule ^routing/(.*)$ /index.php?eID=routing&route=$1 [QSA,L]
 
-    }
+   This will have the effect of using this extension for handling requests starting with ``routing/``.
 
-and modify your action ``demo``::
 
-    /**
-     * @param int $value
-     * @return void
-     */
-    public function demo($value) {
-        $persons = $this->personRepository->findAll();
-        $this->view->assign('persons', $persons);
-        $this->view->setVariablesToRender(array('persons'));
-    }
-
-and you're done! Extbase's dispatcher will see your special view "Demo" to be used for format "Json" and instantiate it
-instead of the default view. Your domain objects will be serialized and the JSON header sent automatically.
-
-**Good to know:** The class name pattern is ``@vendor\@extension\View\@controller\@action@format``.
+Read more in the `manual <https://github.com/xperseguers/t3ext-routing/tree/master/Documentation>`_.
