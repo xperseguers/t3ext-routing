@@ -12,9 +12,9 @@ What does it do?
 
 This extension lets you route requests like::
 
-    http://your-website.tld/routing/extension-key/my-demo/1234
-    http://your-website.tld/routing/extension-key/my-demo/1234.json
-    http://your-website.tld/routing/extension-key/my-demo/99
+    http://localhost/routing/extension-key/my-demo/1234
+    http://localhost/routing/extension-key/my-demo/1234.json
+    http://localhost/routing/extension-key/my-demo/99
 
 to any controller/action based on a YAML-based routing configuration. In this example,
 where ``1234`` and ``99`` will be mapped to some method argument (and converted to domain object if needed) and
