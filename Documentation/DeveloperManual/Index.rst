@@ -72,7 +72,7 @@ Static route parts
 ^^^^^^^^^^^^^^^^^^
 
 Let's create a route that calls the ``listAction`` of the ``ProductController`` when browsing to
-``http://localhost/my/demo``:
+``http://localhost/routing/extension-key/my/demo``:
 
 *Example: Simple route with static route parts Configuration/Routes.yaml*
 
@@ -82,7 +82,7 @@ Let's create a route that calls the ``listAction`` of the ``ProductController`` 
 	  name: 'Static demo route'
 	  uriPattern: 'my/demo'
 	  defaults:
-	    '@package':    'My.Demo'
+	    '@package':    'MyVendor.Demo'
 	    '@plugin':     'MyPlugin'
 	    '@controller': 'Product'
 	    '@action':     'list'
@@ -110,14 +110,14 @@ Let's add some dynamics to the previous example:
 	  name: 'Dynamic demo route'
 	  uriPattern: 'my/demo/{@action}'
 	  defaults:
-	    '@package':    'My.Demo'
+	    '@package':    'MyVendor.Demo'
 	    '@plugin':     'MyPlugin'
 	    '@controller': 'Product'
 
-Now ``http://localhost/my/demo/list`` calls the ``listAction`` just like in the previous
+Now ``http://localhost/routing/extension-key/my/demo/list`` calls the ``listAction`` just like in the previous
 example.
 
-With ``http://localhost/my/demo/new`` you'd invoke the ``newAction`` and so on.
+With ``http://localhost/routing/extension-key/my/demo/new`` you'd invoke the ``newAction`` and so on.
 
 .. note::
 
@@ -136,12 +136,12 @@ set any kind of arguments:
 	  name: 'Dynamic demo route with parameter'
 	  uriPattern: 'products/list/{sortOrder}.{@format}'
 	  defaults:
-	    '@package':    'My.Demo'
+	    '@package':    'MyVendor.Demo'
 	    '@plugin':     'MyPlugin'
 	    '@controller': 'Product'
 	    '@action':     'list'
 
-Browsing to ``http://localhost/products/list/descending.xml`` will then call the ``listAction`` in
+Browsing to ``http://localhost/routing/extension-key/products/list/descending.xml`` will then call the ``listAction`` in
 your ``Product`` controller and the request argument ``sortOrder`` has the value of
 ``descending``.
 
@@ -165,13 +165,13 @@ its technical identifier (uid) automatically:
 	  name: 'Single product route'
 	  uriPattern: 'products/{product}'
 	  defaults:
-	    '@package':    'My.Demo'
+	    '@package':    'MyVendor.Demo'
 	    '@plugin':     'MyPlugin'
 	    '@controller': 'Product'
 	    '@action':     'show'
 
 If you add this route *above the previously generated dynamic routes*, an URI pointing to the show action of
-the ProductController should look like ``http://localhost/products/123``.
+the ProductController should look like ``http://localhost/routing/extension-key/products/123``.
 
 
 .. _developer-manual-demo-routing:
