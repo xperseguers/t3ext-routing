@@ -117,8 +117,13 @@ class RoutingController {
 								$pluginParameters['format'] = $controllerParameters['@format'];
 							}
 
-							if (count($pluginParameters) > 0 && !empty($controllerParameters['@plugin'])) {
+							if (!empty($controllerParameters['@plugin']) && (count($pluginParameters) > 0 || count($_POST) > 0)) {
 								$pluginNamespace = $this->extensionService->getPluginNamespace($controllerParameters['@extension'], $controllerParameters['@plugin']);
+								$postKeys = array_keys($_POST);
+								foreach ($postKeys as $key) {
+									$_POST[$pluginNamespace][$key] = $_POST[$key];
+									unset($_POST[$key]);
+								}
 								foreach ($pluginParameters as $key => $value) {
 									// TODO: should we put to $_POST under some conditions?
 									$_GET[$pluginNamespace][$key] = $value;
