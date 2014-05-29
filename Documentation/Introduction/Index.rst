@@ -42,13 +42,30 @@ be passed as ``route`` parameter when you create your URI. E.g., ::
 
 	http://localhost/index.php?eID=routing&route=extension-key/custom/segments
 
-In order to make the URI visually more appealing, we suggest that you use a rewrite rule in your :file:`.htaccess`:
+In order to make the URI visually more appealing, we suggest that you use a rewrite rule for your web server. Following
+subsections shows how to change your Apache or Nginx configuration so that requests starting with ``routing/``
+(arbitrary segment you may change to fit your needs) be handled by this extension. URI above would then become::
+
+	http://localhost/routing/extension-key/custom/segments
+
+
+.. _usage-apache:
+
+Apache
+^^^^^^
+
+Add following line to your virtual host configuration block or to a :file:`.htaccess` at root:
 
 .. code-block:: apacheconf
 
 	RewriteRule ^routing/(.*)$ /index.php?eID=routing&route=$1 [QSA,L]
 
-This will have the effect of using this extension for handling requests starting with ``routing/`` and the previous URI
-would then become::
 
-	http://localhost/routing/extension-key/custom/segments
+.. _usage-nginx:
+
+Nginx
+^^^^^
+
+.. code-block:: nginx
+
+	rewrite ^/routing/(.*)$ /index.php?eID=routing&route=$1 last;
