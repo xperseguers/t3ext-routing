@@ -89,7 +89,7 @@ class RoutingController {
 					foreach ($this->routes as $route) {
 						if (preg_match($route['uriPattern'], $subroute, $arguments)) {
 							$this->lastRouteName = !empty($route['name']) ? sprintf('[%s] %s', $extensionKey, $route['name']) : NULL;
-							$controllerParameters = $route['default'];
+							$controllerParameters = $route['defaults'];
 							$pluginParameters = array();
 
 							foreach ($arguments as $key => $value) {

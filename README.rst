@@ -29,7 +29,7 @@ The routing is stored as ``Configuration/Routes.yaml`` and looks like that::
     -
       name: 'Demo action with a parameter in a given format (JSON, ...)'
       uriPattern: 'my-demo/{value}.{@format}'
-      default:
+      defaults:
         '@package':    'MyVendor.ExtensionKey'
         '@plugin':     'API'
         '@controller': 'Dummy'
@@ -37,7 +37,7 @@ The routing is stored as ``Configuration/Routes.yaml`` and looks like that::
     -
       name: 'Demo action with a parameter'
       uriPattern: 'my-demo/{value}'
-      default:
+      defaults:
         '@package':    'MyVendor.ExtensionKey'
         '@plugin':     'API'
         '@controller': 'Dummy'
