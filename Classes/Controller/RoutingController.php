@@ -214,7 +214,8 @@ class RoutingController {
 		\TYPO3\CMS\Frontend\Utility\EidUtility::initTCA();
 
 		$tsfe->initFEuser();
-		$tsfe->checkAlternativeIdMethods();
+		// We do not want (nor need) EXT:realurl to be invoked:
+		//$tsfe->checkAlternativeIdMethods();
 		$tsfe->determineId();
 		$tsfe->initTemplate();
 		$tsfe->getConfigArray();
