@@ -174,6 +174,40 @@ If you add this route *above the previously generated dynamic routes*, an URI po
 the ProductController should look like ``http://localhost/routing/extension-key/products/123``.
 
 
+.. _developer-manual-request-methods:
+
+Request Methods
+---------------
+
+Usually the Routing Framework does not care whether it handles a GET or POST request and just looks at the request path.
+However in some cases it makes sense to restrict a route to certain HTTP methods. This is especially true for REST APIs
+where you often need the same URI to invoke different actions depending on the HTTP method.
+
+This can be achieved with a setting ``httpMethods``, which accepts an array of HTTP verbs:
+
+.. code-block:: yaml
+
+	-
+	  uriPattern: 'some/path'
+	  defaults:
+	    '@package':    'MyVendor.Demo'
+	    '@plugin':     'MyPlugin'
+	    '@controller': 'Standard'
+	    '@action':     'action1'
+	  httpMethods: ['GET']
+	-
+	  uriPattern: 'some/path'
+	  defaults:
+	    '@package':    'MyVendor.Demo'
+	    '@plugin':     'MyPlugin'
+	    '@controller': 'Standard'
+	    '@action':     'action2'
+	  httpMethods: ['POST', 'PUT']
+
+Given the above routes a *GET* request to ``http://localhost/routing/extension-key/some/path`` would invoke
+the ``action1Action()`` while *POST* and *PUT* requests to the same URI would call ``action2Action()``.
+
+
 .. _developer-manual-demo-routing:
 
 Demo Routing

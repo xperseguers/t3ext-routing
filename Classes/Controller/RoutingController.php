@@ -74,6 +74,7 @@ class RoutingController {
 	public function dispatch() {
 		$response = NULL;
 		$route = GeneralUtility::_GET('route');
+		$httpMethod = $_SERVER['REQUEST_METHOD'];
 
 		if (preg_match('#^([^/]+)/(.*)$#', $route, $matches)) {
 			$extensionKey = $matches[1];
@@ -87,6 +88,12 @@ class RoutingController {
 
 					$controllerParameters = NULL;
 					foreach ($this->routes as $route) {
+						if (is_array($route['httpMethods'])) {
+							if (!in_array($httpMethod, $route['httpMethods'])) {
+								// Skip this route as it does not match the expected HTTP method (GET, HEAD, POST, PUT)
+								continue;
+							}
+						}
 						if (preg_match($route['uriPattern'], $subroute, $arguments)) {
 							$this->lastRouteName = !empty($route['name']) ? sprintf('[%s] %s', $extensionKey, $route['name']) : NULL;
 							$controllerParameters = $route['defaults'];
