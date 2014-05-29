@@ -71,4 +71,4 @@ Installation
    This will have the effect of using this extension for handling requests starting with ``routing/``.
 
 
-Read more in the `manual <https://github.com/xperseguers/t3ext-routing/tree/master/Documentation>`_.
+Read more in the `manual <http://docs.typo3.org/typo3cms/extensions/routing/>`_.

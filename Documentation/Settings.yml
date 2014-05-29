@@ -7,7 +7,7 @@ conf.py:
   copyright: 2014
   project: Request Routing Service
   version: 0.1
-  release: 0.1.0-dev
+  release: 0.1.0
   latex_documents:
   - - Index
     - routing.tex
