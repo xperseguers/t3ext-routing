@@ -124,13 +124,17 @@ class RoutingController {
 								$pluginParameters['format'] = $controllerParameters['@format'];
 							}
 
-							if (!empty($controllerParameters['@plugin']) && (count($pluginParameters) > 0 || count($_POST) > 0)) {
+							if (!empty($controllerParameters['@plugin'])) {
 								$pluginNamespace = $this->extensionService->getPluginNamespace($controllerParameters['@extension'], $controllerParameters['@plugin']);
+
+								$this->tangleFilesArray($pluginNamespace);
+
 								$postKeys = array_keys($_POST);
 								foreach ($postKeys as $key) {
 									$_POST[$pluginNamespace][$key] = $_POST[$key];
 									unset($_POST[$key]);
 								}
+
 								foreach ($pluginParameters as $key => $value) {
 									// TODO: should we put to $_POST under some conditions?
 									$_GET[$pluginNamespace][$key] = $value;
@@ -171,6 +175,40 @@ class RoutingController {
 	 */
 	public function getLastRouteName() {
 		return $this->lastRouteName;
+	}
+
+	/**
+	 * Transforms the _FILES superglobal into a more convoluted form to
+	 * be handled by Extbase.
+	 *
+	 * IMPORTANT: Your form should not contain any namespace.
+	 *
+	 * Correct:
+	 *   <input type="file" name="myfile">
+	 *   <input type="file" name="myfiles[]" multiple>
+	 *
+	 * Incorrect:
+	 *   <input type="file" name="mynamespace[myfile]">
+	 *   <input type="file" name="mynamespace[myfiles][]" multiple>
+	 *
+	 * @param string $namespace
+	 * @return void
+	 * @see \TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder::untangleFilesArray()
+	 */
+	protected function tangleFilesArray($namespace) {
+		if (!count($_FILES)) {
+			return;
+		}
+		$files = array_keys($_FILES);
+		$fileKeys = array('error', 'name', 'size', 'tmp_name', 'type');
+		$namespacedFiles = array();
+		foreach ($files as $file) {
+			$currentFile = $_FILES[$file];
+			foreach ($fileKeys as $key) {
+				$namespacedFiles[$namespace][$key][$file] = $currentFile[$key];
+			}
+		}
+		$_FILES = $namespacedFiles;
 	}
 
 	/**
