@@ -64,6 +64,10 @@ Installation
 
        RewriteRule ^routing/(.*)$ /index.php?eID=routing&route=$1 [QSA,L]
 
+   or, if you are using Nginx::
+
+       rewrite ^/routing/(.*)$ /index.php?eID=routing&route=$1 last;
+
    This will have the effect of using this extension for handling requests starting with ``routing/``.
 
 
