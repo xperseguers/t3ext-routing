@@ -72,97 +72,59 @@ class RoutingController {
 	 * @throws \RuntimeException
 	 */
 	public function dispatch() {
+		$controllerParameters = NULL;
 		$response = NULL;
 		$route = GeneralUtility::_GET('route');
-		$httpMethod = $_SERVER['REQUEST_METHOD'];
 
-		if (preg_match('#^([^/]+)/(.*)$#', $route, $matches)) {
-			$extensionKey = $matches[1];
-			$subroute = $matches[2];
-
-			if (ExtensionManagementUtility::isLoaded($extensionKey)) {
-				$extensionPath = ExtensionManagementUtility::extPath($extensionKey);
-				$routesFileName = $extensionPath . 'Configuration/Routes.yaml';
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['routing']['globalRoutes'])) {
+			$this->routes = array();
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['routing']['globalRoutes'] as $routesFileName) {
+				if (substr($routesFileName, 0, 4) === 'EXT:') {
+					list($extensionKey, $fileName) = explode('/', substr($routesFileName, 4), 2);
+					$extensionPath = ExtensionManagementUtility::extPath($extensionKey);
+					$routesFileName = $extensionPath . $fileName;
+				}
 				if (@is_file($routesFileName)) {
 					$this->loadRoutes($routesFileName);
+				}
+			}
+			if (count($this->routes) > 0) {
+				$controllerParameters = $this->getControllerParameters($route);
+			}
+		}
 
-					$controllerParameters = NULL;
-					foreach ($this->routes as $route) {
-						if (is_array($route['httpMethods'])) {
-							if (!in_array($httpMethod, $route['httpMethods'])) {
-								// Skip this route as it does not match the expected HTTP method (GET, HEAD, POST, PUT)
-								continue;
-							}
-						}
-						if (preg_match($route['uriPattern'], $subroute, $arguments)) {
-							$this->lastRouteName = !empty($route['name']) ? sprintf('[%s] %s', $extensionKey, $route['name']) : NULL;
-							$controllerParameters = $route['defaults'];
-							$pluginParameters = array();
+		if ($controllerParameters === NULL) {
+			$this->routes = array();
+			if (preg_match('#^([^/]+)/(.*)$#', $route, $matches)) {
+				$extensionKey = $matches[1];
+				$subroute = $matches[2];
 
-							foreach ($arguments as $key => $value) {
-								if (!is_int($key)) {
-									$key = str_replace('__AT__', '@', $key);
-									if ($key{0} === '@') {
-										$controllerParameters[$key] = $value;
-									} else {
-										$pluginParameters[$key] = $value;
-									}
-								}
-							}
-
-							$namespaceParts = explode('.', $controllerParameters['@package']);
-							if (count($namespaceParts) === 2) {
-								$controllerParameters['@vendor'] = $namespaceParts[0];
-								$controllerParameters['@extension'] = GeneralUtility::underscoredToUpperCamelCase($namespaceParts[1]);
-							} else {
-								$controllerParameters['@extension'] = GeneralUtility::underscoredToUpperCamelCase($namespaceParts[0]);
-							}
-							if (empty($pluginParameters['action']) && !empty($controllerParameters['@action'])) {
-								$pluginParameters['action'] = $controllerParameters['@action'];
-							}
-							if (empty($pluginParameters['format']) && !empty($controllerParameters['@format'])) {
-								$pluginParameters['format'] = $controllerParameters['@format'];
-							}
-
-							if (!empty($controllerParameters['@plugin'])) {
-								$pluginNamespace = $this->extensionService->getPluginNamespace($controllerParameters['@extension'], $controllerParameters['@plugin']);
-
-								$this->tangleFilesArray($pluginNamespace);
-
-								$postKeys = array_keys($_POST);
-								foreach ($postKeys as $key) {
-									$_POST[$pluginNamespace][$key] = $_POST[$key];
-									unset($_POST[$key]);
-								}
-
-								foreach ($pluginParameters as $key => $value) {
-									// TODO: should we put to $_POST under some conditions?
-									$_GET[$pluginNamespace][$key] = $value;
-								}
-							}
-
-							break;
-						}
-					}
-
-					if ($controllerParameters !== NULL) {
-						$this->initTSFE();
-
-						/** @var \TYPO3\CMS\Extbase\Core\Bootstrap $bootstrap */
-						$bootstrap = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Core\\Bootstrap');
-
-						$configuration = array(
-							'pluginName' => $controllerParameters['@plugin'],
-							'extensionName' => $controllerParameters['@extension'],
-						);
-						if (!empty($controllerParameters['@vendor'])) {
-							$configuration['vendorName'] = $controllerParameters['@vendor'];
-						}
-
-						$response = $bootstrap->run('', $configuration);
+				if (ExtensionManagementUtility::isLoaded($extensionKey)) {
+					$extensionPath = ExtensionManagementUtility::extPath($extensionKey);
+					$routesFileName = $extensionPath . 'Configuration/Routes.yaml';
+					if (@is_file($routesFileName)) {
+						$this->loadRoutes($routesFileName);
+						$controllerParameters = $this->getControllerParameters($subroute, $extensionKey);
 					}
 				}
 			}
+		}
+
+		if ($controllerParameters !== NULL) {
+			$this->initTSFE();
+
+			/** @var \TYPO3\CMS\Extbase\Core\Bootstrap $bootstrap */
+			$bootstrap = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Core\\Bootstrap');
+
+			$configuration = array(
+				'pluginName' => $controllerParameters['@plugin'],
+				'extensionName' => $controllerParameters['@extension'],
+			);
+			if (!empty($controllerParameters['@vendor'])) {
+				$configuration['vendorName'] = $controllerParameters['@vendor'];
+			}
+
+			$response = $bootstrap->run('', $configuration);
 		}
 
 		return $response;
@@ -175,6 +137,79 @@ class RoutingController {
 	 */
 	public function getLastRouteName() {
 		return $this->lastRouteName;
+	}
+
+	/**
+	 * Returns the controller parameters and updates superglobal variables $_GET,
+	 * $_POST and $_FILES if needed.
+	 *
+	 * @param string $subroute
+	 * @param string $extensionKey
+	 * @return array|NULL
+	 */
+	protected function getControllerParameters($subroute, $extensionKey = NULL) {
+		$controllerParameters = NULL;
+		$httpMethod = $_SERVER['REQUEST_METHOD'];
+
+		foreach ($this->routes as $route) {
+			if (is_array($route['httpMethods'])) {
+				if (!in_array($httpMethod, $route['httpMethods'])) {
+					// Skip this route as it does not match the expected HTTP method (GET, HEAD, POST, PUT)
+					continue;
+				}
+			}
+			if (preg_match($route['uriPattern'], $subroute, $arguments)) {
+				$this->lastRouteName = !empty($route['name']) ? sprintf('[%s] %s', ($extensionKey ?: 'GLOBAL'), $route['name']) : NULL;
+				$controllerParameters = $route['defaults'];
+				$pluginParameters = array();
+
+				foreach ($arguments as $key => $value) {
+					if (!is_int($key)) {
+						$key = str_replace('__AT__', '@', $key);
+						if ($key{0} === '@') {
+							$controllerParameters[$key] = $value;
+						} else {
+							$pluginParameters[$key] = $value;
+						}
+					}
+				}
+
+				$namespaceParts = explode('.', $controllerParameters['@package']);
+				if (count($namespaceParts) === 2) {
+					$controllerParameters['@vendor'] = $namespaceParts[0];
+					$controllerParameters['@extension'] = GeneralUtility::underscoredToUpperCamelCase($namespaceParts[1]);
+				} else {
+					$controllerParameters['@extension'] = GeneralUtility::underscoredToUpperCamelCase($namespaceParts[0]);
+				}
+				if (empty($pluginParameters['action']) && !empty($controllerParameters['@action'])) {
+					$pluginParameters['action'] = $controllerParameters['@action'];
+				}
+				if (empty($pluginParameters['format']) && !empty($controllerParameters['@format'])) {
+					$pluginParameters['format'] = $controllerParameters['@format'];
+				}
+
+				if (!empty($controllerParameters['@plugin'])) {
+					$pluginNamespace = $this->extensionService->getPluginNamespace($controllerParameters['@extension'], $controllerParameters['@plugin']);
+
+					$this->tangleFilesArray($pluginNamespace);
+
+					$postKeys = array_keys($_POST);
+					foreach ($postKeys as $key) {
+						$_POST[$pluginNamespace][$key] = $_POST[$key];
+						unset($_POST[$key]);
+					}
+
+					foreach ($pluginParameters as $key => $value) {
+						// TODO: should we put to $_POST under some conditions?
+						$_GET[$pluginNamespace][$key] = $value;
+					}
+				}
+
+				break;
+			}
+		}
+
+		return $controllerParameters;
 	}
 
 	/**
@@ -226,7 +261,6 @@ class RoutingController {
 			$routes = \Spyc::YAMLLoad($yamlFileName);
 		}
 
-		$this->routes = array();
 		foreach ($routes as $route) {
 			// Convert the URI pattern to a regular expression
 			$route['uriPattern'] = str_replace('.', '\\.', $route['uriPattern']);

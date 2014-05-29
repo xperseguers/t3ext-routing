@@ -208,6 +208,20 @@ Given the above routes a *GET* request to ``http://localhost/routing/extension-k
 the ``action1Action()`` while *POST* and *PUT* requests to the same URI would call ``action2Action()``.
 
 
+.. _developer-manual-global-routes:
+
+Global routes
+-------------
+
+The Routing Framework lets you register global routes as well, that is, without any ``extension-key`` segment. As the
+extension key is then missing, you should manually register corresponding YAML files to be globally available by adding
+a line to your :file:`ext_localconf.php`:
+
+.. code-block:: php
+
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['routing']['globalRoutes'][] = 'EXT:' . $_EXTKEY . '/Configuration/MyGlobalRoutes.yaml';
+
+
 .. _developer-manual-demo-routing:
 
 Demo Routing
