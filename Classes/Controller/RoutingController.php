@@ -287,7 +287,7 @@ class RoutingController {
 	protected function initTSFE() {
 		$pageId = GeneralUtility::_GP('id');
 		/** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $tsfe */
-		$tsfe = GeneralUtility::makeInstance(
+		$GLOBALS['TSFE'] = GeneralUtility::makeInstance(
 			'TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController',
 			$GLOBALS['TYPO3_CONF_VARS'],
 			$pageId,
@@ -297,18 +297,16 @@ class RoutingController {
 		\TYPO3\CMS\Frontend\Utility\EidUtility::initLanguage();
 		\TYPO3\CMS\Frontend\Utility\EidUtility::initTCA();
 
-		$tsfe->initFEuser();
+		$GLOBALS['TSFE']->initFEuser();
 		// We do not want (nor need) EXT:realurl to be invoked:
-		//$tsfe->checkAlternativeIdMethods();
-		$tsfe->determineId();
-		$tsfe->initTemplate();
-		$tsfe->getConfigArray();
+		//$GLOBALS['TSFE']->checkAlternativeIdMethods();
+		$GLOBALS['TSFE']->determineId();
+		$GLOBALS['TSFE']->initTemplate();
+		$GLOBALS['TSFE']->getConfigArray();
 		if ($pageId > 0) {
-			$tsfe->settingLanguage();
+			$GLOBALS['TSFE']->settingLanguage();
 		}
-		$tsfe->settingLocale();
-
-		$GLOBALS['TSFE'] = $tsfe;
+		$GLOBALS['TSFE']->settingLocale();
 
 		// Get linkVars, absRefPrefix, etc
 		//\TYPO3\CMS\Frontend\Page\PageGenerator::pagegenInit();
