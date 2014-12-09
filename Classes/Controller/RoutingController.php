@@ -193,6 +193,17 @@ class RoutingController {
 
 					$this->tangleFilesArray($pluginNamespace);
 
+					if (!empty($controllerParameters['@controller'])) {
+						switch ($httpMethod) {
+							case 'GET':
+								$pluginParameters['controller'] = $controllerParameters['@controller'];
+								break;
+							case 'POST':
+								$_POST['controller'] = $controllerParameters['@controller'];
+								break;
+						}
+					}
+
 					$postKeys = array_keys($_POST);
 					foreach ($postKeys as $key) {
 						$_POST[$pluginNamespace][$key] = $_POST[$key];
