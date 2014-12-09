@@ -222,6 +222,19 @@ a line to your :file:`ext_localconf.php`:
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['routing']['globalRoutes'][] = 'EXT:' . $_EXTKEY . '/Configuration/MyGlobalRoutes.yaml';
 
 
+.. _developer-manual-demo-localization:
+
+Localization
+------------
+
+Native TYPO3 localization works out-of-the-box if the call to the eID router script of this extension is made in the
+context of a given page; that is, if a GET parameter ``id`` exists. E.g.,
+
+::
+
+	http://localhost/routing/extension-key/my-demo/1234?id=12
+
+
 .. _developer-manual-demo-routing:
 
 Demo Routing
