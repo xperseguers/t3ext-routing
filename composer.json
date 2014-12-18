@@ -1,0 +1,25 @@
+{
+  "name": "causal/routing",
+  "description": "Service to route HTTP/REST requests to your own controller/actions.",
+  "version": "0.2.0",
+  "type": "typo3-cms-extension",
+  "keywords": ["TYPO3 CMS", "REST", "web service", "routing", "HTTP request"],
+  "homepage": "https://github.com/xperseguers/t3ext-routing",
+  "license": "GPL-2.0+",
+  "authors": [
+    {
+      "name": "Xavier Perseguers",
+      "email": "xavier@causal.ch",
+      "company": "Causal Sàrl",
+      "homepage": "https://www.causal.ch",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">= 5.3.3, <= 5.6.99",
+    "typo3/cms-core": ">= 6.2.0, <= 6.2.99"
+  },
+  "support": {
+	"issues": "https://github.com/xperseguers/t3ext-routing/issues"
+  }
+}
