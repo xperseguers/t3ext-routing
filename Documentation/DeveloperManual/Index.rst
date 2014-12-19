@@ -305,7 +305,7 @@ Classes/Controller/DummyController.php
 	     * @param int $value
 	     * @return string
 	     */
-	    public function demo($value) {
+	    public function demoAction($value) {
 	        $response = array('value' => $value);
 
 	        if ($this->request->getFormat() === 'json') {
