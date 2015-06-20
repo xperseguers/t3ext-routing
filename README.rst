@@ -70,9 +70,8 @@ Installation
 
    This will have the effect of using this extension for handling requests starting with ``routing/``.
 
-.. tip::
-    If you need to support localization (``&L=<some-language-uid>``), then you should change the suggesting routing above
-    to include the root page uid of your website (``&id=<some-uid>``). This is needed because localization mode and default
-    default language may differ in complex environments and thus cannot be inferred.
+**Tip:** If you need to support localization (``&L=<some-language-uid>``), then you should change the suggesting routing above
+to include the root page uid of your website (``&id=<some-uid>``). This is needed because localization mode and default
+default language may differ in complex environments and thus cannot be inferred.
 
 Read more in the `manual <http://docs.typo3.org/typo3cms/extensions/routing/>`_.
