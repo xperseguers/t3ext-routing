@@ -4,10 +4,10 @@
 
 ---
 conf.py:
-  copyright: 2014
+  copyright: 2014-2015
   project: Request Routing Service
-  version: 0.2
-  release: 0.2.0
+  version: 0.3
+  release: 0.3.0-dev
   latex_documents:
   - - Index
     - routing.tex
