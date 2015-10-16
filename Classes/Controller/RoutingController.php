@@ -191,10 +191,10 @@ class RoutingController
                     if (!empty($controllerParameters['@controller'])) {
                         switch ($httpMethod) {
                             case 'GET':
-                                $pluginParameters['controller'] = $controllerParameters['@controller'];
+                                $pluginParameters['controller'] = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@controller']);
                                 break;
                             case 'POST':
-                                $_POST['controller'] = $controllerParameters['@controller'];
+                                $_POST['controller'] = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@controller']);
                                 break;
                         }
                     }
