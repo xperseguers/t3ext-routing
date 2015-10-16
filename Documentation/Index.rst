@@ -30,7 +30,7 @@ Request Routing Service
 		REST, web service, routing, HTTP request
 
 	:Copyright:
-		2014
+		2014-2015
 
 	:Author:
 		Xavier Perseguers
@@ -52,7 +52,7 @@ Request Routing Service
 	**Other versions of this document**
 
 	:PDF:
-		http://docs.typo3.org/typo3cms/extensions/routing/0.2.0/_pdf/
+		http://docs.typo3.org/typo3cms/extensions/routing/0.3.0/_pdf/
 
 
 	**Table of Contents**

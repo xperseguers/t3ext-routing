@@ -1,7 +1,7 @@
 {
   "name": "causal/routing",
   "description": "Service to route HTTP/REST requests to your own controller/actions.",
-  "version": "0.3.0-dev",
+  "version": "0.3.0",
   "type": "typo3-cms-extension",
   "keywords": ["TYPO3 CMS", "REST", "web service", "routing", "HTTP request"],
   "homepage": "https://github.com/xperseguers/t3ext-routing",
