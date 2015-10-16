@@ -29,7 +29,8 @@ When the eID router script of this extension is called, it will lookup the first
 	http://localhost/index.php?eID=routing&route=extension-key/custom/segments
 
 That is, ``extension-key``, and check all routes from file
-:file:`typo3conf/ext/{extension-key}/Configuration/Routes.yaml` until one can return the correct URI for the specified
+:file:`typo3conf/ext/{extension-key}/Configuration/Routes.yaml` (or
+:file:`typo3conf/ext/{extension-key}/Configuration/Routes.yml`) until one can return the correct URI for the specified
 arguments.
 
 .. note::

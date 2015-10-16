@@ -24,7 +24,7 @@ where ``1234`` and ``99`` will be mapped to some method argument (and converted 
 Sample Routing
 --------------
 
-The routing is stored as ``Configuration/Routes.yaml`` and looks like that::
+The routing is stored as ``Configuration/Routes.yaml`` (or ``Configuration/Routes.yml``) and looks like that::
 
     -
       name: 'Demo action with a parameter in a given format (JSON, ...)'

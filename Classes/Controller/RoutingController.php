@@ -95,8 +95,12 @@ class RoutingController
                 if (ExtensionManagementUtility::isLoaded($extensionKey)) {
                     $extensionPath = ExtensionManagementUtility::extPath($extensionKey);
                     $routesFileName = $extensionPath . 'Configuration/Routes.yaml';
+                    $routesFileNameAlternate = $extensionPath . 'Configuration/Routes.yml';
                     if (@is_file($routesFileName)) {
                         $this->loadRoutes($routesFileName);
+                        $controllerParameters = $this->getControllerParameters($subroute, $extensionKey);
+                    } elseif (@is_file($routesFileNameAlternate)) {
+                        $this->loadRoutes($routesFileNameAlternate);
                         $controllerParameters = $this->getControllerParameters($subroute, $extensionKey);
                     }
                 }

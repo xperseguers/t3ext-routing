@@ -28,8 +28,8 @@ where ``1234`` and ``99`` will be mapped to some method parameter (and converted
 ``json`` will set the response format to ``json``.
 
 The router is using the first segment of the ``route`` parameter as extension key to determine how to handle the
-remaining of the requested route. A file :file:`Configuration/Routes.yaml` in the corresponding extension directory is then
-read to process the request and dispatch it accordingly.
+remaining of the requested route. A file :file:`Configuration/Routes.yaml` (or :file:`Configuration/Routes.yml`) in the
+corresponding extension directory is then read to process the request and dispatch it accordingly.
 
 
 .. _usage:
