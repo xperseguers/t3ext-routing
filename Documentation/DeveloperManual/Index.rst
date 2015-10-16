@@ -364,4 +364,6 @@ and modify your action ``demo``:
 and you're done! Extbase's dispatcher will see your special view "Demo" to be used for format "Json" and instantiate it
 instead of the default view. Your domain objects will be serialized and the JSON header sent automatically.
 
-.. hint:: The class name pattern is ``@vendor\@extension\View\@controller\@action@format``.
+.. hint::
+    The class name pattern is ``@vendor\@extension\View\@controller\@action@format``, meaning you will have to specify
+    a JSON output by ending your route with ``.json``.
