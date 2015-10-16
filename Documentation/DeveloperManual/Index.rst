@@ -355,7 +355,7 @@ and modify your action ``demo``:
 	 * @param int $value
 	 * @return void
 	 */
-	public function demo($value) {
+	public function demoAction($value) {
 	    $persons = $this->personRepository->findAll();
 	    $this->view->assign('persons', $persons);
 	    $this->view->setVariablesToRender(array('persons'));
