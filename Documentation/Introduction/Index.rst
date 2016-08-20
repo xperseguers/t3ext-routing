@@ -69,3 +69,15 @@ Nginx
 .. code-block:: nginx
 
 	rewrite ^/routing/(.*)$ /index.php?eID=routing&route=$1 last;
+
+HTTP Debug Header
+-----------------
+
+The name of the route is sent as an additional header line in the HTTP response to the client by default:
+
+..
+
+	X-Causal-Routing-Route: [ExtensionKey] Demo action with a parameter
+
+
+This can be deactivated (supressed) in the extension configuration (Extension Manager).
