@@ -194,7 +194,10 @@ class RoutingController
 
                     if (!empty($controllerParameters['@controller'])) {
                         switch ($httpMethod) {
+                            case 'DELETE':
                             case 'GET':
+                            case 'PATCH':
+                            case 'PUT':
                                 $pluginParameters['controller'] = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@controller']);
                                 break;
                             case 'POST':
