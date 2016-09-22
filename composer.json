@@ -1,7 +1,6 @@
 {
   "name": "causal/routing",
   "description": "Service to route HTTP/REST requests to your own controller/actions.",
-  "version": "0.3.0",
   "type": "typo3-cms-extension",
   "keywords": ["TYPO3 CMS", "REST", "web service", "routing", "HTTP request"],
   "homepage": "https://github.com/xperseguers/t3ext-routing",
@@ -14,6 +13,15 @@
       "role": "Developer"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "Causal\\Routing\\": "Classes/"
+    }
+  },
+  "replace": {
+    "routing": "self.version",
+    "typo3-ter/routing": "self.version"
+  },
   "require": {
     "php": ">= 5.3.3, <= 7.0.99",
     "typo3/cms-core": ">= 6.2.0, <= 7.99.99"

@@ -74,4 +74,4 @@ Installation
 to include the root page uid of your website (``&id=<some-uid>``). This is needed because localization mode and default
 default language may differ in complex environments and thus cannot be inferred.
 
-Read more in the `manual <http://docs.typo3.org/typo3cms/extensions/routing/>`_.
+Read more in the `manual <https://docs.typo3.org/typo3cms/extensions/routing/>`_.
