@@ -363,4 +363,9 @@ $routeName = $routing->getLastRouteName();
 if (!empty($routeName)) {
     header('X-Causal-Routing-Route: ' . $routeName);
 }
+
+if (empty($ret)) {
+    header('HTTP/1.1 204 No Content');
+}
+
 echo $ret;
