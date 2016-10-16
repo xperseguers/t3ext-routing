@@ -10,7 +10,7 @@
  * writing. "version" and "dependencies" must not be touched!
  ***************************************************************/
 
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
     'title' => 'Request Routing Service',
     'description' => 'Service to route HTTP/REST requests to your own controller/actions.',
     'category' => 'fe',
@@ -32,17 +32,14 @@ $EM_CONF[$_EXTKEY] = array(
     'author_company' => 'Causal Sàrl',
     'CGLcompliance' => '',
     'CGLcompliance_note' => '',
-    'constraints' => array(
-        'depends' => array(
+    'constraints' => [
+        'depends' => [
             'php' => '5.5.0-7.0.99',
             'typo3' => '6.2.0-8.99.99',
-        ),
-        'conflicts' => array(
-        ),
-        'suggests' => array(
-        ),
-    ),
+        ],
+        'conflicts' => [],
+        'suggests' => [],
+    ],
     '_md5_values_when_last_written' => '',
-    'suggests' => array(
-    ),
-);
+    'suggests' => [],
+];

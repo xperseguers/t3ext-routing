@@ -53,14 +53,14 @@ class RoutingController
      */
     public function __construct()
     {
-        $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        $this->extensionService = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Service\\ExtensionService');
+        $this->objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
+        $this->extensionService = $this->objectManager->get(\TYPO3\CMS\Extbase\Service\ExtensionService::class);
     }
 
     /**
      * Dispatches the request and returns data.
      *
-     * @return mixed
+     * @return string
      * @throws \RuntimeException
      */
     public function dispatch()
@@ -70,7 +70,7 @@ class RoutingController
         $route = GeneralUtility::_GET('route');
 
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['routing']['globalRoutes'])) {
-            $this->routes = array();
+            $this->routes = [];
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['routing']['globalRoutes'] as $routesFileName) {
                 if (substr($routesFileName, 0, 4) === 'EXT:') {
                     list($extensionKey, $fileName) = explode('/', substr($routesFileName, 4), 2);
@@ -87,7 +87,7 @@ class RoutingController
         }
 
         if ($controllerParameters === null) {
-            $this->routes = array();
+            $this->routes = [];
             if (preg_match('#^([^/]+)/(.*)$#', $route, $matches)) {
                 $extensionKey = $matches[1];
                 $subroute = $matches[2];
@@ -111,12 +111,12 @@ class RoutingController
             $this->initTSFE();
 
             /** @var \TYPO3\CMS\Extbase\Core\Bootstrap $bootstrap */
-            $bootstrap = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Core\\Bootstrap');
+            $bootstrap = $this->objectManager->get(\TYPO3\CMS\Extbase\Core\Bootstrap::class);
 
-            $configuration = array(
+            $configuration = [
                 'pluginName' => $controllerParameters['@plugin'],
                 'extensionName' => $controllerParameters['@extension'],
-            );
+            ];
             if (!empty($controllerParameters['@vendor'])) {
                 $configuration['vendorName'] = $controllerParameters['@vendor'];
             }
@@ -160,7 +160,7 @@ class RoutingController
             if (preg_match($route['uriPattern'], $subroute, $arguments)) {
                 $this->lastRouteName = !empty($route['name']) ? sprintf('[%s] %s', ($extensionKey ?: 'GLOBAL'), $route['name']) : null;
                 $controllerParameters = $route['defaults'];
-                $pluginParameters = array();
+                $pluginParameters = [];
 
                 foreach ($arguments as $key => $value) {
                     if (!is_int($key)) {
@@ -249,8 +249,8 @@ class RoutingController
             return;
         }
         $files = array_keys($_FILES);
-        $fileKeys = array('error', 'name', 'size', 'tmp_name', 'type');
-        $namespacedFiles = array();
+        $fileKeys = ['error', 'name', 'size', 'tmp_name', 'type'];
+        $namespacedFiles = [];
         foreach ($files as $file) {
             $currentFile = $_FILES[$file];
             foreach ($fileKeys as $key) {
@@ -305,7 +305,7 @@ class RoutingController
         $pageId = GeneralUtility::_GP('id');
         /** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $tsfe */
         $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
-            'TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController',
+            \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController::class,
             $GLOBALS['TYPO3_CONF_VARS'],
             $pageId,
             ''
@@ -331,8 +331,8 @@ class RoutingController
 
 }
 
-/** @var \Causal\Routing\Controller\RoutingController $routing */
-$routing = GeneralUtility::makeInstance('Causal\\Routing\\Controller\\RoutingController');
+/** @var RoutingController $routing */
+$routing = GeneralUtility::makeInstance(RoutingController::class);
 
 try {
     $ret = $routing->dispatch();

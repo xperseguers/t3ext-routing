@@ -264,8 +264,8 @@ ext_localconf.php
 	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
 	    'MyVendor.' . $_EXTKEY,
 	    'API',
-	    array('Dummy' => 'demo'),
-	    array('Dummy' => 'demo')
+	    ['Dummy' => 'demo'],
+	    ['Dummy' => 'demo']
 	);
 
 
@@ -307,7 +307,7 @@ Classes/Controller/DummyController.php
 	     * @return string
 	     */
 	    public function demoAction($value) {
-	        $response = array('value' => $value);
+	        $response = ['value' => $value];
 
 	        if ($this->request->getFormat() === 'json') {
 	            // Hint: you should use \TYPO3\CMS\Extbase\Mvc\View\JsonView instead
@@ -337,14 +337,14 @@ Create a file :file:`Classes/View/Dummy/DemoJson.php`:
 
 	class DemoJson extends \TYPO3\CMS\Extbase\Mvc\View\JsonView {
 
-	    protected $configuration = array(
-	        'persons' => array(
-	            '_descendAll' => array(
-	                //'_only' => array('property1', 'property2'),
-	                '_exclude' => array('pid')
-	            )
-	        )
-	    );
+	    protected $configuration = [
+	        'persons' => [
+	            '_descendAll' => [
+	                //'_only' => ['property1', 'property2'],
+	                '_exclude' => ['pid']
+	            ]
+	        ]
+	    ];
 
 	}
 
@@ -359,7 +359,7 @@ and modify your action ``demo``:
 	public function demoAction($value) {
 	    $persons = $this->personRepository->findAll();
 	    $this->view->assign('persons', $persons);
-	    $this->view->setVariablesToRender(array('persons'));
+	    $this->view->setVariablesToRender(['persons']);
 	}
 
 and you're done! Extbase's dispatcher will see your special view "Demo" to be used for format "Json" and instantiate it
