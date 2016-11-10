@@ -16,6 +16,7 @@ namespace Causal\Routing\Controller;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Frontend\Utility\EidUtility;
 
 /**
  * Routing controller.
@@ -27,7 +28,6 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
  */
 class RoutingController
 {
-
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager
      */
@@ -158,7 +158,9 @@ class RoutingController
                 }
             }
             if (preg_match($route['uriPattern'], $subroute, $arguments)) {
-                $this->lastRouteName = !empty($route['name']) ? sprintf('[%s] %s', ($extensionKey ?: 'GLOBAL'), $route['name']) : null;
+                $this->lastRouteName = !empty($route['name'])
+                    ? sprintf('[%s] %s', ($extensionKey ?: 'GLOBAL'), $route['name'])
+                    : null;
                 $controllerParameters = $route['defaults'];
                 $pluginParameters = [];
 
@@ -176,9 +178,11 @@ class RoutingController
                 $namespaceParts = explode('.', $controllerParameters['@package']);
                 if (count($namespaceParts) === 2) {
                     $controllerParameters['@vendor'] = $namespaceParts[0];
-                    $controllerParameters['@extension'] = GeneralUtility::underscoredToUpperCamelCase($namespaceParts[1]);
+                    $extension = GeneralUtility::underscoredToUpperCamelCase($namespaceParts[1]);
+                    $controllerParameters['@extension'] = $extension;
                 } else {
-                    $controllerParameters['@extension'] = GeneralUtility::underscoredToUpperCamelCase($namespaceParts[0]);
+                    $extension = GeneralUtility::underscoredToUpperCamelCase($namespaceParts[0]);
+                    $controllerParameters['@extension'] = $extension;
                 }
                 if (empty($pluginParameters['action']) && !empty($controllerParameters['@action'])) {
                     $pluginParameters['action'] = $controllerParameters['@action'];
@@ -188,20 +192,24 @@ class RoutingController
                 }
 
                 if (!empty($controllerParameters['@plugin'])) {
-                    $pluginNamespace = $this->extensionService->getPluginNamespace($controllerParameters['@extension'], $controllerParameters['@plugin']);
+                    $pluginNamespace = $this->extensionService->getPluginNamespace(
+                        $controllerParameters['@extension'],
+                        $controllerParameters['@plugin']
+                    );
 
                     $this->tangleFilesArray($pluginNamespace);
 
                     if (!empty($controllerParameters['@controller'])) {
+                        $controller = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@controller']);
                         switch ($httpMethod) {
                             case 'DELETE':
                             case 'GET':
                             case 'PATCH':
                             case 'PUT':
-                                $pluginParameters['controller'] = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@controller']);
+                                $pluginParameters['controller'] = $controller;
                                 break;
                             case 'POST':
-                                $_POST['controller'] = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@controller']);
+                                $_POST['controller'] = $controller;
                                 break;
                         }
                     }
@@ -311,8 +319,8 @@ class RoutingController
             ''
         );
 
-        \TYPO3\CMS\Frontend\Utility\EidUtility::initLanguage();
-        \TYPO3\CMS\Frontend\Utility\EidUtility::initTCA();
+        EidUtility::initLanguage();
+        EidUtility::initTCA();
 
         $GLOBALS['TSFE']->initFEuser();
         // We do not want (nor need) EXT:realurl to be invoked:
@@ -328,44 +336,4 @@ class RoutingController
         // Get linkVars, absRefPrefix, etc
         //\TYPO3\CMS\Frontend\Page\PageGenerator::pagegenInit();
     }
-
 }
-
-/** @var RoutingController $routing */
-$routing = GeneralUtility::makeInstance(RoutingController::class);
-
-try {
-    $ret = $routing->dispatch();
-} catch (\Exception $e) {
-    header('HTTP/1.1 500 Internal Server Error');
-    echo 'Error ' . $e->getCode() . ': ' . $e->getMessage();
-    exit;
-}
-
-if ($ret === null) {
-    header('HTTP/1.0 404 Not Found');
-    echo <<<HTML
-<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">
-<html><head>
-<title>404 Not Found</title>
-</head><body>
-<h1>Not Found</h1>
-<p>The requested URL {$_SERVER['REQUEST_URI']} was not found on this server.</p>
-<hr>
-<address>Routing Service at {$_SERVER['SERVER_NAME']}</address>
-</body></html>
-HTML;
-    exit();
-}
-
-// Debugging information
-$routeName = $routing->getLastRouteName();
-if (!empty($routeName)) {
-    header('X-Causal-Routing-Route: ' . $routeName);
-}
-
-if (is_string($ret) && $ret === '') {
-    header('HTTP/1.1 204 No Content');
-}
-
-echo $ret;
