@@ -364,7 +364,7 @@ if (!empty($routeName)) {
     header('X-Causal-Routing-Route: ' . $routeName);
 }
 
-if (empty($ret)) {
+if (is_string($ret) && $ret === '') {
     header('HTTP/1.1 204 No Content');
 }
 
