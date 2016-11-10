@@ -4,7 +4,7 @@ Request Routing Service
 
 Service to route HTTP/REST requests to your own controller/actions.
 
-**Good to know:** The routing is inspired by the way Flow's router works (`read more <http://docs.typo3.org/flow/TYPO3FlowDocumentation/2.1/TheDefinitiveGuide/PartIII/Routing.html>`_).
+**Good to know:** The routing is inspired by the way Flow's router works (`read more <https://flowframework.readthedocs.io/en/2.1/TheDefinitiveGuide/PartIII/Routing.html>`_).
 
 
 What does it do?
