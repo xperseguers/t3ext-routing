@@ -30,7 +30,7 @@ Request Routing Service
 		REST, web service, routing, HTTP request
 
 	:Copyright:
-		2014-2016
+		2014-2017
 
 	:Author:
 		Xavier Perseguers
