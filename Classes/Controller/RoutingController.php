@@ -329,6 +329,23 @@ class RoutingController
         //\TYPO3\CMS\Frontend\Page\PageGenerator::pagegenInit();
     }
 
+    /**
+     * Determine from extension configuration, if HTTP debug header can be added.
+     *
+     * @return boolean
+     */
+    public function supressHttpDebugHeader()
+    {
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['routing'])) {
+            $extensionConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['routing']);
+            if (is_array($extensionConfiguration) && array_key_exists('supressHttpDebugHeader', $extensionConfiguration)) {
+                if ($extensionConfiguration['supressHttpDebugHeader'] == '1') {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
 
 /** @var RoutingController $routing */
@@ -358,10 +375,12 @@ HTML;
     exit();
 }
 
-// Debugging information
-$routeName = $routing->getLastRouteName();
-if (!empty($routeName)) {
-    header('X-Causal-Routing-Route: ' . $routeName);
+// Add debugging information to HTTP response
+if ($routing->supressHttpDebugHeader() === false) {
+    $routeName = $routing->getLastRouteName();
+    if (!empty($routeName)) {
+        header('X-Causal-Routing-Route: ' . $routeName);
+    }
 }
 
 if (is_string($ret) && $ret === '') {

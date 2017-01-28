@@ -1,0 +1,2 @@
+# cat=features/enable; type=boolean; label=LLL:EXT:routing/Resources/Private/Language/locallang.em.xlf:supress_http_debug_header
+supressHttpDebugHeader = 0

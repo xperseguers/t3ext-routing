@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2016-08-20T00:00:00Z" product-name="routing">
+        <header/>
+        <body>
+            <trans-unit id="supress_http_debug_header">
+                <source>Supress HTTP Debug Header:If ticked, the HTTP header X-Causal-Routing-Route is not added</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
