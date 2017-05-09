@@ -176,10 +176,15 @@ class RoutingController
                 $namespaceParts = explode('.', $controllerParameters['@package']);
                 if (count($namespaceParts) === 2) {
                     $controllerParameters['@vendor'] = $namespaceParts[0];
-                    $controllerParameters['@extension'] = GeneralUtility::underscoredToUpperCamelCase($namespaceParts[1]);
+                    $controllerParameters['@extension'] = $namespaceParts[1];
                 } else {
-                    $controllerParameters['@extension'] = GeneralUtility::underscoredToUpperCamelCase($namespaceParts[0]);
+                    $controllerParameters['@extension'] = $namespaceParts[0];
                 }
+                
+                if (ucfirst($controllerParameters['@extension']) !== $controllerParameters['@extension']) {
+                    $controllerParameters['@extension'] = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@extension']);
+                }
+                
                 if (empty($pluginParameters['action']) && !empty($controllerParameters['@action'])) {
                     $pluginParameters['action'] = $controllerParameters['@action'];
                 }
@@ -193,15 +198,19 @@ class RoutingController
                     $this->tangleFilesArray($pluginNamespace);
 
                     if (!empty($controllerParameters['@controller'])) {
+                        if (ucfirst($controllerParameters['@controller']) !== $controllerParameters['@controller']) {
+                            $controllerParameters['@controller'] = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@controller']);
+                        }
+
                         switch ($httpMethod) {
                             case 'DELETE':
                             case 'GET':
                             case 'PATCH':
                             case 'PUT':
-                                $pluginParameters['controller'] = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@controller']);
+                                $pluginParameters['controller'] = $controllerParameters['@controller'];
                                 break;
                             case 'POST':
-                                $_POST['controller'] = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@controller']);
+                                $_POST['controller'] = $controllerParameters['@controller'];
                                 break;
                         }
                     }
