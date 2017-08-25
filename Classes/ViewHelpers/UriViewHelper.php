@@ -24,7 +24,6 @@ namespace Causal\Routing\ViewHelpers;
  */
 class UriViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {
-
     /**
      * Renders a route URI.
      *
@@ -37,5 +36,4 @@ class UriViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
         $routingUri = '/?eID=routing&route=' . $route;
         return $routingUri;
     }
-
 }
