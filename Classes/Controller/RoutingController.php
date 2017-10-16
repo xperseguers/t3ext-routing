@@ -178,12 +178,16 @@ class RoutingController
                 $namespaceParts = explode('.', $controllerParameters['@package']);
                 if (count($namespaceParts) === 2) {
                     $controllerParameters['@vendor'] = $namespaceParts[0];
-                    $extension = GeneralUtility::underscoredToUpperCamelCase($namespaceParts[1]);
-                    $controllerParameters['@extension'] = $extension;
+                    $controllerParameters['@extension'] = $namespaceParts[1];
                 } else {
-                    $extension = GeneralUtility::underscoredToUpperCamelCase($namespaceParts[0]);
+                    $extension = $namespaceParts[0];
                     $controllerParameters['@extension'] = $extension;
                 }
+
+                if (ucfirst($controllerParameters['@extension']) !== $controllerParameters['@extension']) {
+                    $controllerParameters['@extension'] = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@extension']);
+                }
+
                 if (empty($pluginParameters['action']) && !empty($controllerParameters['@action'])) {
                     $pluginParameters['action'] = $controllerParameters['@action'];
                 }
@@ -200,16 +204,18 @@ class RoutingController
                     $this->tangleFilesArray($pluginNamespace);
 
                     if (!empty($controllerParameters['@controller'])) {
-                        $controller = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@controller']);
+                        if (ucfirst($controllerParameters['@controller']) !== $controllerParameters['@controller']) {
+                            $controllerParameters['@controller'] = GeneralUtility::underscoredToUpperCamelCase($controllerParameters['@controller']);
+                        }
                         switch ($httpMethod) {
                             case 'DELETE':
                             case 'GET':
                             case 'PATCH':
                             case 'PUT':
-                                $pluginParameters['controller'] = $controller;
+                                $pluginParameters['controller'] = $controllerParameters['@controller'];
                                 break;
                             case 'POST':
-                                $_POST['controller'] = $controller;
+                                $_POST['controller'] = $controllerParameters['@controller'];
                                 break;
                         }
                     }
