@@ -75,3 +75,16 @@ to include the root page uid of your website (``&id=<some-uid>``). This is neede
 default language may differ in complex environments and thus cannot be inferred.
 
 Read more in the `manual <https://docs.typo3.org/typo3cms/extensions/routing/>`_.
+
+
+Compatibility with TYPO3 v8
+===========================
+
+Since `change 78002 <https://docs.typo3.org/typo3cms/extensions/core/8.7/Changelog/8.5/Breaking-78002-EnforceCHashArgumentForExtbaseActions.html>`_,
+you need to adapt your TypoScript so that `cHash` is not required::
+
+    plugin.tx_<yourext> {
+        features {
+            requireCHashArgumentForActionArguments = 0
+        }
+    }
