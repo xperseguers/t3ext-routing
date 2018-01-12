@@ -122,6 +122,9 @@ class RoutingController
             }
 
             $response = $bootstrap->run('', $configuration);
+
+            // Render headers from FE controller
+            $GLOBALS['TSFE']->processOutput();
         }
 
         return $response;
