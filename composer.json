@@ -4,7 +4,7 @@
   "type": "typo3-cms-extension",
   "keywords": ["TYPO3 CMS", "REST", "web service", "routing", "HTTP request"],
   "homepage": "https://github.com/xperseguers/t3ext-routing",
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "authors": [
     {
       "name": "Xavier Perseguers",
