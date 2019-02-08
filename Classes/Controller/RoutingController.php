@@ -213,6 +213,7 @@ class RoutingController
                         switch ($httpMethod) {
                             case 'DELETE':
                             case 'GET':
+                            case 'OPTIONS':
                             case 'PATCH':
                             case 'PUT':
                                 $pluginParameters['controller'] = $controllerParameters['@controller'];
