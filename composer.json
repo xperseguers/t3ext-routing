@@ -19,7 +19,6 @@
     }
   },
   "replace": {
-    "routing": "self.version",
     "typo3-ter/routing": "self.version"
   },
   "require": {
@@ -27,6 +26,11 @@
     "typo3/cms-core": ">= 6.2.0, <= 8.7.99"
   },
   "support": {
-	"issues": "https://github.com/xperseguers/t3ext-routing/issues"
+    "issues": "https://github.com/xperseguers/t3ext-routing/issues"
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "routing"
+    }
   }
 }
