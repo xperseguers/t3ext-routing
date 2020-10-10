@@ -4,7 +4,7 @@
 
 ---
 conf.py:
-  copyright: 2014-2017
+  copyright: 2014-2020
   project: Request Routing Service
   version: 0.5
   release: 0.5.0
