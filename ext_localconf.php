@@ -9,3 +9,5 @@ $boot = function ($_EXTKEY) {
 
 $boot($_EXTKEY);
 unset($boot);
+// Add Json DataHandler
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['routing']['dataHandler']['application/json'] = \Causal\Routing\DataHandler\JsonDataHandler::class;

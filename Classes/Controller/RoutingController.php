@@ -14,6 +14,8 @@
 
 namespace Causal\Routing\Controller;
 
+use Causal\Routing\DataHandler\DataHandlerFactory;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Frontend\Utility\EidUtility;
@@ -151,7 +153,8 @@ class RoutingController
     protected function getControllerParameters($subroute, $extensionKey = null)
     {
         $controllerParameters = null;
-        $httpMethod = $_SERVER['REQUEST_METHOD'];
+        $request = \TYPO3\CMS\Core\Http\ServerRequestFactory::fromGlobals();
+        $httpMethod = $request->getMethod();
 
         foreach ($this->routes as $route) {
             if (is_array($route['httpMethods'])) {
@@ -204,6 +207,8 @@ class RoutingController
                         $controllerParameters['@plugin']
                     );
 
+                    $bodyData = $this->objectManager->get(DataHandlerFactory::class)->getParsedBody($request);
+
                     $this->tangleFilesArray($pluginNamespace);
 
                     if (!empty($controllerParameters['@controller'])) {
@@ -219,14 +224,14 @@ class RoutingController
                                 $pluginParameters['controller'] = $controllerParameters['@controller'];
                                 break;
                             case 'POST':
-                                $_POST['controller'] = $controllerParameters['@controller'];
+                                $bodyData['controller'] = $controllerParameters['@controller'];
                                 break;
                         }
                     }
 
-                    $postKeys = array_keys($_POST);
+                    $postKeys = array_keys($bodyData);
                     foreach ($postKeys as $key) {
-                        $_POST[$pluginNamespace][$key] = $_POST[$key];
+                        $_POST[$pluginNamespace][$key] = $bodyData[$key];
                         unset($_POST[$key]);
                     }
 
